@@ -5,46 +5,55 @@ Write your code for the 'Binary Search Tree' exercise in this file. Make the tes
 To get started with TDD, see the `README.md` file in your
 `ruby/binary-search-tree` directory.
 =end
-class Bst 
-    attr_accessor :data, :left, :right
 
-    def initialize(value)
-        @data = values
-        @right = nil
+class BinaryTree # TreeStructure
+    attr_accessor :root
+    
+    def initialize(node)
+        self.root = node
     end
-
-    def insert ()
+    
+    def search(data) 
+        #use recursion to find given value
+        # 1. check if root is value
+        # 2. if not go search at  children
+        return true if root.data == data
+        return search_helper(root, data)  
+    end 
+    
+    def search_helper(node, data)
+        return if node.nil?
+        
+        return true if node.data == data
+        
+        found = false
+        found = search_helper(node.left, data) #depth first search: go down left side of the tree and come back to 
+        return found if found == true
+        return search_helper(node.right, data)
     end
 end 
 
-class Binary_search_tree
-    attr_accessor :root, :size
+class Bst # Node
+    attr_reader :data
+    attr_accessor :left, :right
 
-    def intitialize()
-        @root = nil
-        @size = 0
+    def initialize(data)
+        @data = data
+        @left = nil
+        @right = nil
     end
+
     def insert(value)
-      if @root == nil
-          @root = Bst.new(value)
-      else
-          curr_node = @root
-          previous_node = @root
-          #while loop helps finding the position of insertion
-          while curr_node != nil
-              previous_node = curr_node
-              if value < curr_node.value
-                  curr_node = curr_node.left
-              else
-                  curr_node = curr_node.right
-              end
-          end
-          if value < previous_node.value
-              previous_node.left = Bst.new(value)
-          else
-              previous_node.right = Bst.new(value)
-          end
-      end
-      @size += 1
-  end
-end
+        if value > data
+            right ? right.insert(value) : self.right = Bst.new(value)
+        else
+            left ? left.insert(value) : self.left = Bst.new(value)
+        end
+    end
+    def each(&block)
+        return enum_for(:each) unless block_given?
+        left.each(&block) if left
+        yield(data)
+        right.each(&block) if right
+    end
+end 
